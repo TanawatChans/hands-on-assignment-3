@@ -16,3 +16,39 @@ provider "google" {
 resource "google_compute_network" "web_network" {
   name = "web"
 }
+
+
+################# web-public #################
+resource "google_compute_firewall" "web_public_firewall" {
+ name    = "web-firewall"
+ network = "default"
+
+ allow {
+   protocol = "tcp"
+   ports    = ["80","443"]
+ }
+
+ source_ranges = ["0.0.0.0/0"]
+ target_tags = ["public"]
+}
+
+resource "google_compute_instance" "web_public_instance" {
+  name         = "web-public"
+  description = "web-public allow traffic on ports 80 and 443 from anywhere"
+  machine_type = "e2-medium"
+  zone         = "asia-southeast1-c"
+
+  tags = ["public"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
+  }
+
+  network_interface {
+    network = google_compute_network.web_network.name
+    access_config {
+    }
+  }
+}

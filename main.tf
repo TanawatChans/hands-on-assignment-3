@@ -20,7 +20,7 @@ resource "google_compute_network" "web_network" {
 
 ################# web-public #################
 resource "google_compute_firewall" "web_public_firewall" {
- name    = "web-firewall"
+ name    = "web-public-firewall"
  network = google_compute_network.web_network.name
 
  allow {
@@ -29,7 +29,7 @@ resource "google_compute_firewall" "web_public_firewall" {
  }
 
  source_ranges = ["0.0.0.0/0"]
- target_tags = ["public"]
+ target_tags = ["web-public"]
 }
 
 resource "google_compute_instance" "web_public_instance" {
@@ -38,7 +38,7 @@ resource "google_compute_instance" "web_public_instance" {
   machine_type = "e2-medium"
   zone         = "asia-southeast1-c"
 
-  tags = ["public"]
+  tags = ["web-public"]
 
   boot_disk {
     initialize_params {
@@ -52,3 +52,4 @@ resource "google_compute_instance" "web_public_instance" {
     }
   }
 }
+

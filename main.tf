@@ -21,7 +21,7 @@ resource "google_compute_network" "web_network" {
 ################# web-public #################
 resource "google_compute_firewall" "web_public_firewall" {
  name    = "web-firewall"
- network = "default"
+ network = google_compute_network.web_network.name
 
  allow {
    protocol = "tcp"
